@@ -77,7 +77,7 @@ def model_with_weights(model, weights, skip_mismatch):
 
 
 def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
-                  freeze_backbone=False, lr=1e-5, config=None):
+                  freeze_backbone=False, lr=1e-5, config=None, alpha, gamma):
     """ Creates three models (model, training_model, prediction_model).
 
     Args
@@ -489,7 +489,9 @@ def main(args=None):
             multi_gpu=args.multi_gpu,
             freeze_backbone=args.freeze_backbone,
             lr=args.lr,
-            config=args.config
+            config=args.config,
+            alpha=args.alpha,
+            gamma=args.gamma
         )
 
     # print model summary
