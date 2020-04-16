@@ -72,16 +72,19 @@ class Evaluate(keras.callbacks.Callback):
         # compute per class average precision
         total_instances = []
         precisions = []
-        for label, (average_precision, num_annotations) in average_precisions.items():
+        iou = []
+        for label, (average_precision, num_annotations, iou) in average_precisions.items():
             if self.verbose == 1:
                 print('{:.0f} instances of class'.format(num_annotations),
-                      self.generator.label_to_name(label), 'with average precision: {:.4f}'.format(average_precision))
+                      self.generator.label_to_name(label), 'with average precision: {:.4f}'.format(average_precision), 'and iou : {:.4f}'.format(iou))
             total_instances.append(num_annotations)
             precisions.append(average_precision)
+            ious.append(iou)
         if self.weighted_average:
             self.mean_ap = sum([a * b for a, b in zip(total_instances, precisions)]) / sum(total_instances)
         else:
             self.mean_ap = sum(precisions) / sum(x > 0 for x in total_instances)
+            self.mean_iou = sum(ious)/ sum(x > 0 for x in total_instances)
 
         if self.tensorboard:
             import tensorflow as tf
@@ -96,3 +99,4 @@ class Evaluate(keras.callbacks.Callback):
 
         if self.verbose == 1:
             print('mAP: {:.4f}'.format(self.mean_ap))
+            print('IoU: {:.4f}'.format(self.mean_iou))

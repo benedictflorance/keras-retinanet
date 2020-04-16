@@ -188,6 +188,7 @@ def evaluate(
         false_positives = np.zeros((0,))
         true_positives  = np.zeros((0,))
         scores          = np.zeros((0,))
+        iou             = np.zeros((0,))
         num_annotations = 0.0
 
         for i in range(generator.size()):
@@ -212,6 +213,7 @@ def evaluate(
                     false_positives = np.append(false_positives, 0)
                     true_positives  = np.append(true_positives, 1)
                     detected_annotations.append(assigned_annotation)
+                    iou             = np.append(max_overlap)
                 else:
                     false_positives = np.append(false_positives, 1)
                     true_positives  = np.append(true_positives, 0)
@@ -236,7 +238,7 @@ def evaluate(
 
         # compute average precision
         average_precision  = _compute_ap(recall, precision)
-        average_precisions[label] = average_precision, num_annotations
+        average_precisions[label] = average_precision, num_annotations, iou
 
     # inference time
     inference_time = np.sum(all_inferences) / generator.size()
