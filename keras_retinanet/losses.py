@@ -28,6 +28,7 @@ def focal(alpha=0.25, gamma=2.0):
     Returns
         A functor that computes the focal loss using the alpha and gamma.
     """
+    print('Gamma is: ', gamma)
     def _focal(y_true, y_pred):
         """ Compute the focal loss given the target tensor and the predicted tensor.
 
