@@ -72,7 +72,7 @@ class Evaluate(keras.callbacks.Callback):
         # compute per class average precision
         total_instances = []
         precisions = []
-        iou = []
+        ious = []
         for label, (average_precision, num_annotations, iou) in average_precisions.items():
             average_iou = sum(iou)/num_annotations
             if self.verbose == 1:
@@ -80,7 +80,7 @@ class Evaluate(keras.callbacks.Callback):
                       self.generator.label_to_name(label), 'with average precision: {:.4f}'.format(average_precision), 'and  average iou : {:.4f}'.format(average_iou))
             total_instances.append(num_annotations)
             precisions.append(average_precision)
-            ious.append(iou)
+            ious.append(average_iou)
         if self.weighted_average:
             self.mean_ap = sum([a * b for a, b in zip(total_instances, precisions)]) / sum(total_instances)
         else:
