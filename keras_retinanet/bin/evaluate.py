@@ -176,12 +176,14 @@ def main(args=None):
         # print evaluation
         total_instances = []
         precisions = []
-        for label, (average_precision, num_annotations) in average_precisions.items():
+        ious = []
+        for label, (average_precision, num_annotations, iou) in average_precisions.items():
+            average_iou = sum(iou)/num_annotations
             print('{:.0f} instances of class'.format(num_annotations),
-                  generator.label_to_name(label), 'with average precision: {:.4f}'.format(average_precision))
+                  generator.label_to_name(label), 'with average precision: {:.4f}'.format(average_precision), 'and  average iou : {:.4f}'.format(average_iou))
             total_instances.append(num_annotations)
             precisions.append(average_precision)
-
+            ious.append(average_iou)
         if sum(total_instances) == 0:
             print('No test instances found.')
             return
@@ -190,7 +192,7 @@ def main(args=None):
 
         print('mAP using the weighted average of precisions among classes: {:.4f}'.format(sum([a * b for a, b in zip(total_instances, precisions)]) / sum(total_instances)))
         print('mAP: {:.4f}'.format(sum(precisions) / sum(x > 0 for x in total_instances)))
-
+        print('IoU: {:.4f}'.format(sum(ious)/ sum(x > 0 for x in total_instances)))
 
 if __name__ == '__main__':
     main()
